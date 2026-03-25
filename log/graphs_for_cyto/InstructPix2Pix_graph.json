@@ -1,0 +1,340 @@
+{
+    "nodes": [
+        {
+            "data": {
+                "id": "InstructPix2Pix",
+                "label": "InstructPix2Pix"
+            }
+        },
+        {
+            "data": {
+                "id": "Stable Diffusion",
+                "label": "Stable Diffusion"
+            }
+        },
+        {
+            "data": {
+                "id": "Latent Diffusion Framework",
+                "label": "Latent Diffusion Framework"
+            }
+        },
+        {
+            "data": {
+                "id": "VAE Encoder/Decoder",
+                "label": "VAE Encoder/Decoder"
+            }
+        },
+        {
+            "data": {
+                "id": "UNet",
+                "label": "UNet"
+            }
+        },
+        {
+            "data": {
+                "id": "Source Image Conditioning via Concatenation",
+                "label": "Source Image Conditioning via Concatenation"
+            }
+        },
+        {
+            "data": {
+                "id": "Channel Concatenation",
+                "label": "Channel Concatenation"
+            }
+        },
+        {
+            "data": {
+                "id": "Noisy Latent z_t",
+                "label": "Noisy Latent z_t"
+            }
+        },
+        {
+            "data": {
+                "id": "Encoded Source Image E(x)",
+                "label": "Encoded Source Image E(x)"
+            }
+        },
+        {
+            "data": {
+                "id": "Zero-Initialized Weights",
+                "label": "Zero-Initialized Weights"
+            }
+        },
+        {
+            "data": {
+                "id": "Noise Prediction Loss",
+                "label": "Noise Prediction Loss"
+            }
+        },
+        {
+            "data": {
+                "id": "Prompt-to-Prompt",
+                "label": "Prompt-to-Prompt"
+            }
+        },
+        {
+            "data": {
+                "id": "Two-Condition CFG",
+                "label": "Two-Condition CFG"
+            }
+        },
+        {
+            "data": {
+                "id": "Text Instruction Condition c_T",
+                "label": "Text Instruction Condition c_T"
+            }
+        },
+        {
+            "data": {
+                "id": "Image Condition c_I",
+                "label": "Image Condition c_I"
+            }
+        },
+        {
+            "data": {
+                "id": "Image Guidance Scale s_I",
+                "label": "Image Guidance Scale s_I"
+            }
+        },
+        {
+            "data": {
+                "id": "Text Guidance Scale s_T",
+                "label": "Text Guidance Scale s_T"
+            }
+        },
+        {
+            "data": {
+                "id": "Consistency\u2013Editability Tradeoff",
+                "label": "Consistency\u2013Editability Tradeoff"
+            }
+        },
+        {
+            "data": {
+                "id": "Unconditional Baseline",
+                "label": "Unconditional Baseline"
+            }
+        },
+        {
+            "data": {
+                "id": "Condition Dropout",
+                "label": "Condition Dropout"
+            }
+        },
+        {
+            "data": {
+                "id": "Classifier-Free Guidance",
+                "label": "Classifier-Free Guidance"
+            }
+        }
+    ],
+    "edges": [
+        {
+            "data": {
+                "source": "InstructPix2Pix",
+                "target": "Stable Diffusion",
+                "label": "built on top of",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Stable Diffusion",
+                "target": "Latent Diffusion Framework",
+                "label": "uses",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Stable Diffusion",
+                "target": "VAE Encoder/Decoder",
+                "label": "uses",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "InstructPix2Pix",
+                "target": "Source Image Conditioning via Concatenation",
+                "label": "introduces",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Source Image Conditioning via Concatenation",
+                "target": "Channel Concatenation",
+                "label": "implemented via",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Channel Concatenation",
+                "target": "Noisy Latent z_t",
+                "label": "concatenates",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Channel Concatenation",
+                "target": "Encoded Source Image E(x)",
+                "label": "concatenates",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Channel Concatenation",
+                "target": "UNet",
+                "label": "feeds into",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "UNet",
+                "target": "Zero-Initialized Weights",
+                "label": "first conv layer expanded with",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Zero-Initialized Weights",
+                "target": "Stable Diffusion",
+                "label": "preserves pre-trained weights from",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "InstructPix2Pix",
+                "target": "Noise Prediction Loss",
+                "label": "trained with",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Noise Prediction Loss",
+                "target": "Stable Diffusion",
+                "label": "almost identical to standard loss of",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "InstructPix2Pix",
+                "target": "Prompt-to-Prompt",
+                "label": "generates training pairs using",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "InstructPix2Pix",
+                "target": "Two-Condition CFG",
+                "label": "uses at inference",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Two-Condition CFG",
+                "target": "Classifier-Free Guidance",
+                "label": "extends",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Two-Condition CFG",
+                "target": "Text Instruction Condition c_T",
+                "label": "conditions on",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Two-Condition CFG",
+                "target": "Image Condition c_I",
+                "label": "conditions on",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Two-Condition CFG",
+                "target": "Unconditional Baseline",
+                "label": "starts from",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Two-Condition CFG",
+                "target": "Image Guidance Scale s_I",
+                "label": "controlled by",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Two-Condition CFG",
+                "target": "Text Guidance Scale s_T",
+                "label": "controlled by",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Image Guidance Scale s_I",
+                "target": "Consistency\u2013Editability Tradeoff",
+                "label": "navigates",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Text Guidance Scale s_T",
+                "target": "Consistency\u2013Editability Tradeoff",
+                "label": "navigates",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Condition Dropout",
+                "target": "Two-Condition CFG",
+                "label": "enables training for",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Condition Dropout",
+                "target": "Text Instruction Condition c_T",
+                "label": "independently drops",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "Condition Dropout",
+                "target": "Image Condition c_I",
+                "label": "independently drops",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "Encoded Source Image E(x)",
+                "target": "VAE Encoder/Decoder",
+                "label": "produced by",
+                "strength": "weak"
+            }
+        }
+    ]
+}

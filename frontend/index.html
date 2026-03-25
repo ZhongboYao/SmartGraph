@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SmartGraph</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.29.2/cytoscape.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #1a1a2e;
+      font-family: sans-serif;
+    }
+
+    #graph {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ── TOOLBAR ────────────────────────────────────────────── */
+    #toolbar {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    #toolbar button {
+      padding: 6px 14px;
+      border: 1px solid #4a9eff;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: #4a9eff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    #toolbar button:hover  { background: #4a9eff; color: #fff; }
+
+    #graph-selector {
+      padding: 6px 10px;
+      border: 1px solid #4a9eff;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: #4a9eff;
+      font-size: 13px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /*
+      When edge-drawing mode is active, the "+ Edge" button lights up
+      so the user can see the mode is on.
+    */
+    #toolbar button.active { background: #4a9eff; color: #fff; }
+
+    #search-input {
+      padding: 6px 10px;
+      border: 1px solid #4a9eff;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 13px;
+      width: 160px;
+      outline: none;
+    }
+
+    /* Dim non-matching nodes when a search is active */
+    .dimmed {
+      opacity: 0.15;
+    }
+
+    /* ── NOTE POPUP ─────────────────────────────────────────── */
+    #note-popup {
+      display: none;            /* hidden until a node is clicked */
+      position: absolute;
+      width: 220px;
+      background: #16213e;
+      border: 1px solid #4a9eff;
+      border-radius: 8px;
+      padding: 10px;
+      z-index: 20;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    #note-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    #note-title {
+      color: #4a9eff;
+      font-size: 13px;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 170px;
+    }
+
+    #note-close {
+      background: none;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0;
+      line-height: 1;
+    }
+
+    #note-text {
+      width: 100%;
+      height: 90px;
+      background: #0f3460;
+      border: 1px solid #2266bb;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 12px;
+      padding: 6px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
+    #note-hint {
+      color: #666;
+      font-size: 10px;
+      margin-top: 5px;
+    }
+
+    #note-color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    #note-color-row label { color: #aaa; font-size: 11px; }
+
+    #note-color {
+      width: 36px;
+      height: 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0;
+      background: none;
+    }
+
+    /* ── EDGE POPUP ─────────────────────────────────────────── */
+    #edge-popup {
+      display: none;
+      position: absolute;
+      width: 200px;
+      background: #16213e;
+      border: 1px solid #aaaaaa;
+      border-radius: 8px;
+      padding: 10px;
+      z-index: 20;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    #edge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    #edge-header span { color: #aaa; font-size: 12px; font-weight: bold; }
+
+    #edge-close {
+      background: none;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0;
+    }
+
+    #edge-label-input {
+      width: 100%;
+      background: #0f3460;
+      border: 1px solid #2266bb;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 12px;
+      padding: 5px 6px;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+
+    #edge-strength-btn {
+      width: 100%;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+      background: #1a1a2e;
+      color: #aaa;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    #edge-strength-btn:hover { background: #aaa; color: #1a1a2e; }
+
+    /* ── REVIEW MODAL ───────────────────────────────────────── */
+    #review-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 30;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #review-overlay.open { display: flex; }
+
+    #review-modal {
+      background: #16213e;
+      border: 1px solid #4a9eff;
+      border-radius: 10px;
+      padding: 18px;
+      width: 340px;
+      max-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+
+    #review-modal h3 {
+      margin: 0;
+      color: #4a9eff;
+      font-size: 14px;
+    }
+
+    #review-node-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 45vh;
+    }
+
+    .review-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ccddff;
+      font-size: 12px;
+    }
+
+    .review-item input[type="checkbox"] { cursor: pointer; }
+
+    #review-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    #review-actions button {
+      padding: 5px 14px;
+      border-radius: 5px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    #btn-review-confirm {
+      border: 1px solid #4a9eff;
+      background: #4a9eff;
+      color: #fff;
+    }
+
+    #btn-review-cancel {
+      border: 1px solid #666;
+      background: #1a1a2e;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOOLBAR -->
+  <div id="toolbar">
+    <input id="search-input" type="text" placeholder="Search nodes…" />
+    <select id="graph-selector"></select>
+    <button id="btn-new-graph">+ Graph</button>
+    <button id="btn-rename-graph">Rename</button>
+    <button id="btn-add-node">+ Node</button>
+    <button id="btn-add-edge">+ Edge</button>
+    <button id="btn-delete">Delete selected</button>
+    <button id="btn-save">Save</button>
+    <label id="btn-upload" style="padding:6px 14px;border:1px solid #4a9eff;border-radius:6px;background:#1a1a2e;color:#4a9eff;font-size:13px;cursor:pointer;">
+      Upload PDF
+      <input type="file" id="pdf-input" accept=".pdf" style="display:none">
+    </label>
+    <span id="upload-status" style="color:#aaa;font-size:12px;align-self:center;"></span>
+  </div>
+
+  <!-- GRAPH CANVAS -->
+  <div id="graph"></div>
+
+  <!-- NOTE POPUP (hidden by default, shown when a node is clicked) -->
+  <div id="note-popup">
+    <div id="note-header">
+      <span id="note-title"></span>
+      <button id="note-close">✕</button>
+    </div>
+    <textarea id="note-text" placeholder="Add a note…"></textarea>
+    <div id="note-hint">Click outside to close</div>
+    <div id="note-color-row">
+      <label>Node color</label>
+      <input type="color" id="note-color" value="#4a9eff">
+    </div>
+  </div>
+
+  <!-- EDGE POPUP (hidden by default, shown when an edge is clicked) -->
+  <div id="edge-popup">
+    <div id="edge-header">
+      <span>Edge</span>
+      <button id="edge-close">✕</button>
+    </div>
+    <input id="edge-label-input" type="text" placeholder="Relationship label…">
+    <button id="edge-strength-btn">Strength: strong</button>
+  </div>
+
+  <!-- REVIEW MODAL (shown after PDF extraction, before merging) -->
+  <div id="review-overlay">
+    <div id="review-modal">
+      <h3 id="review-title">Review extracted nodes</h3>
+      <div id="review-node-list"></div>
+      <div id="review-actions">
+        <button id="btn-review-cancel">Cancel</button>
+        <button id="btn-review-confirm">Add selected</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── GRAPH SELECTION STATE ────────────────────────────────────
+    let currentGraph = null;
+    const selector   = document.getElementById('graph-selector');
+
+    async function initGraphList() {
+      const res = await fetch('/graphs');
+      const { graphs } = await res.json();
+
+      selector.innerHTML = '';
+      graphs.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = name;
+        selector.appendChild(opt);
+      });
+
+      if (graphs.length > 0) {
+        currentGraph   = graphs[0];
+        selector.value = currentGraph;
+        loadGraph(currentGraph);
+      }
+    }
+
+    selector.addEventListener('change', () => {
+      currentGraph = selector.value;
+      loadGraph(currentGraph);
+    });
+
+    document.getElementById('btn-new-graph').addEventListener('click', async () => {
+      const name = prompt('New graph name:');
+      if (!name || !name.trim()) return;
+      const trimmed = name.trim();
+      await fetch(`/graph/${encodeURIComponent(trimmed)}`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ nodes: [], edges: [] }),
+      });
+      const opt = document.createElement('option');
+      opt.value = opt.textContent = trimmed;
+      selector.appendChild(opt);
+      selector.value = trimmed;
+      currentGraph   = trimmed;
+      loadGraph(currentGraph);
+    });
+
+    document.getElementById('btn-rename-graph').addEventListener('click', async () => {
+      if (!currentGraph) return;
+      const newName = prompt('Rename graph to:', currentGraph);
+      if (!newName || !newName.trim() || newName.trim() === currentGraph) return;
+      const trimmed = newName.trim();
+      const res = await fetch(`/graph/${encodeURIComponent(currentGraph)}`, {
+        method:  'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ new_name: trimmed }),
+      });
+      if (!res.ok) {
+        alert(`Rename failed: ${(await res.json()).detail}`);
+        return;
+      }
+      const opt = selector.querySelector(`option[value="${currentGraph}"]`);
+      if (opt) { opt.value = opt.textContent = trimmed; }
+      currentGraph   = trimmed;
+      selector.value = trimmed;
+    });
+
+    function loadGraph(name) {
+      fetch(`/graph/${encodeURIComponent(name)}`)
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .catch(() => ({ nodes: [], edges: [] }))
+        .then(graphData => { applyGraphData(graphData); });
+    }
+
+
+    // ── CYTOSCAPE INSTANCE ───────────────────────────────────────
+    // Initialised once with empty elements; applyGraphData() replaces
+    // its elements whenever the user switches graphs.
+    const cy = cytoscape({
+      container: document.getElementById('graph'),
+      elements:  [],
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'width':            '10px',
+            'height':           '10px',
+            'background-color': '#4a9eff',
+            'border-width':     '1px',
+            'border-color':     '#2266bb',
+            'label':            'data(label)',
+            'text-valign':      'bottom',
+            'text-halign':      'center',
+            'text-margin-y':    '3px',
+            'color':            '#ccddff',
+            'font-size':        '10px',
+            'text-wrap':        'wrap',
+            'text-max-width':   '90px',
+          }
+        },
+        { selector: 'node:selected',    style: { 'background-color': '#ff9944', 'border-color': '#cc6600' } },
+        { selector: 'node.edge-source', style: { 'background-color': '#44ff88', 'border-color': '#00aa44' } },
+        {
+          selector: 'edge',
+          style: {
+            'label':         '',
+            'font-size':     '10px',
+            'color':         '#ffdd88',
+            'text-rotation': 'autorotate',
+            'text-margin-y': '-8px',
+            'width':         '0.5px',
+            'line-color':    '#aaaaaa',
+            'curve-style':   'bezier',
+          }
+        },
+        {
+          selector: 'edge[strength="weak"]',
+          style: { 'line-style': 'dashed', 'line-dash-pattern': [6, 4], 'width': '1.5px', 'line-color': '#666666' }
+        },
+        { selector: 'edge:selected',    style: { 'line-color': '#ff9944', 'width': '3px' } },
+        { selector: '.dimmed',          style: { 'opacity': 0.15 } },
+        {
+          selector: 'node.newly-added',
+          style: { 'background-color': '#44ffaa', 'border-color': '#00cc66', 'border-width': '2px' }
+        },
+        { selector: 'edge.newly-added', style: { 'line-color': '#44ffaa', 'width': '2px' } },
+      ],
+      layout: { name: 'cose', animate: true, animationDuration: 800,
+                nodeRepulsion: 200000, idealEdgeLength: 100, padding: 40 }
+    });
+
+    // Replace all elements in cy with new graph data and re-apply colors.
+    function applyGraphData(graphData) {
+      cy.elements().remove();
+      cy.add([...graphData.nodes, ...graphData.edges]);
+      cy.nodes().forEach(n => { const c = n.data('color'); if (c) n.style('background-color', c); });
+      cy.layout({ name: 'cose', animate: true, animationDuration: 800,
+                  nodeRepulsion: 200000, idealEdgeLength: 100, padding: 40 }).run();
+    }
+
+
+    // ── EDGE HOVER: show / hide label ────────────────────────────
+    cy.on('mouseover', 'edge', e => { e.target.style('label', e.target.data('label')); });
+    cy.on('mouseout',  'edge', e => { e.target.style('label', ''); });
+
+
+    // ── EDGE POPUP ───────────────────────────────────────────────
+    const edgePopup       = document.getElementById('edge-popup');
+    const edgeLabelInput  = document.getElementById('edge-label-input');
+    const edgeStrengthBtn = document.getElementById('edge-strength-btn');
+    let activeEdge = null;
+
+    function showEdgePopup(edge) {
+      activeEdge = edge;
+      edgeLabelInput.value = edge.data('label') || '';
+      edgeStrengthBtn.textContent = `Strength: ${edge.data('strength') || 'weak'}`;
+      const pos = edge.midpoint();
+      const x = pos.x * cy.zoom() + cy.pan().x;
+      const y = pos.y * cy.zoom() + cy.pan().y;
+      edgePopup.style.left = (x + 10) + 'px';
+      edgePopup.style.top  = Math.max(10, y - 40) + 'px';
+      edgePopup.style.display = 'block';
+    }
+
+    edgeLabelInput.addEventListener('input', () => {
+      if (activeEdge) { activeEdge.data('label', edgeLabelInput.value); saveDebounced(); }
+    });
+
+    edgeStrengthBtn.addEventListener('click', () => {
+      if (!activeEdge) return;
+      const next = activeEdge.data('strength') === 'strong' ? 'weak' : 'strong';
+      activeEdge.data('strength', next);
+      edgeStrengthBtn.textContent = `Strength: ${next}`;
+      saveGraph();
+    });
+
+    document.getElementById('edge-close').addEventListener('click', () => {
+      edgePopup.style.display = 'none';
+      activeEdge = null;
+    });
+
+    cy.on('tap', 'edge', e => { showEdgePopup(e.target); });
+    cy.on('tap', e => {
+      if (e.target === cy) {
+        edgePopup.style.display = 'none';
+        activeEdge = null;
+      }
+    });
+
+
+    // ── NODE INTERACTIONS ────────────────────────────────────────
+    cy.on('tap', 'node', e => {
+      if (edgeMode) handleEdgeModeClick(e.target);
+      else          showNotePopup(e.target);
+    });
+
+    cy.on('dbltap', 'node', e => {
+      const node = e.target;
+      const newLabel = prompt('Rename node:', node.data('label'));
+      if (newLabel && newLabel.trim()) {
+        node.data('label', newLabel.trim());
+        node.data('id',    newLabel.trim());
+        saveGraph();
+      }
+    });
+
+
+    // ── NOTE POPUP ───────────────────────────────────────────────
+    const popup     = document.getElementById('note-popup');
+    const noteText  = document.getElementById('note-text');
+    const noteTitle = document.getElementById('note-title');
+    const noteColor = document.getElementById('note-color');
+    let activeNode  = null;
+
+    function showNotePopup(node) {
+      activeNode = node;
+      noteTitle.textContent = node.data('label');
+      noteText.value  = node.data('note')  || '';
+      noteColor.value = node.data('color') || '#4a9eff';
+      const pos = node.renderedPosition();
+      popup.style.left = (pos.x + 30) + 'px';
+      popup.style.top  = Math.max(10, pos.y - 60) + 'px';
+      popup.style.display = 'block';
+    }
+
+    noteColor.addEventListener('input', () => {
+      if (activeNode) {
+        activeNode.style('background-color', noteColor.value);
+        activeNode.data('color', noteColor.value);
+        saveDebounced();
+      }
+    });
+
+    noteText.addEventListener('input', () => {
+      if (activeNode) activeNode.data('note', noteText.value);
+    });
+
+    document.getElementById('note-close').addEventListener('click', () => {
+      popup.style.display = 'none';
+      activeNode = null;
+    });
+
+    cy.on('tap', e => {
+      if (e.target === cy) { popup.style.display = 'none'; activeNode = null; }
+    });
+
+
+    // ── EDGE DRAWING MODE ────────────────────────────────────────
+    let edgeMode   = false;
+    let edgeSource = null;
+
+    document.getElementById('btn-add-edge').addEventListener('click', () => {
+      edgeMode = !edgeMode;
+      edgeSource = null;
+      document.getElementById('btn-add-edge').classList.toggle('active', edgeMode);
+      document.getElementById('graph').style.cursor = edgeMode ? 'crosshair' : 'default';
+    });
+
+    function handleEdgeModeClick(node) {
+      if (!edgeSource) {
+        edgeSource = node;
+        node.addClass('edge-source');
+      } else {
+        if (node.id() !== edgeSource.id()) {
+          const label    = prompt('Relationship label (e.g. "uses", "trained with"):') || '';
+          const isStrong = confirm('Strong connection?\n\nOK = solid line (strong)\nCancel = dashed line (weak)');
+          cy.add({ group: 'edges', data: {
+            source: edgeSource.id(), target: node.id(),
+            label, strength: isStrong ? 'strong' : 'weak',
+          }});
+          saveGraph();
+        }
+        edgeSource.removeClass('edge-source');
+        edgeSource = null;
+        edgeMode   = false;
+        document.getElementById('btn-add-edge').classList.remove('active');
+        document.getElementById('graph').style.cursor = 'default';
+      }
+    }
+
+
+    // ── ADD NODE ─────────────────────────────────────────────────
+    document.getElementById('btn-add-node').addEventListener('click', () => {
+      const label = prompt('Node label:');
+      if (label && label.trim()) {
+        cy.add({ group: 'nodes', data: { id: label.trim(), label: label.trim(), note: '' } });
+        saveGraph();
+      }
+    });
+
+
+    // ── DELETE SELECTED ──────────────────────────────────────────
+    function deleteSelected() {
+      const selected = cy.$(':selected');
+      if (selected.length === 0) return;
+      if (confirm(`Delete ${selected.length} selected element(s)?`)) {
+        selected.remove();
+        saveGraph();
+      }
+    }
+
+    document.getElementById('btn-delete').addEventListener('click', deleteSelected);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Delete' || e.key === 'Backspace') deleteSelected();
+    });
+
+
+    // ── SAVE ─────────────────────────────────────────────────────
+    const saveBtn = document.getElementById('btn-save');
+    let saveTimer = null;
+
+    async function saveGraph() {
+      if (!currentGraph) return;
+      const nodes = cy.nodes().map(n => ({
+        data: { id: n.data('id'), label: n.data('label'),
+                note: n.data('note') || '', color: n.data('color') || '' }
+      }));
+      const edges = cy.edges().map(e => ({
+        data: { source: e.data('source'), target: e.data('target'),
+                label: e.data('label') || '', strength: e.data('strength') || 'weak' }
+      }));
+      saveBtn.textContent = 'Saving…';
+      try {
+        const res = await fetch(`/graph/${encodeURIComponent(currentGraph)}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nodes, edges }),
+        });
+        saveBtn.textContent = res.ok ? 'Saved ✓' : 'Error';
+      } catch {
+        saveBtn.textContent = 'Error';
+      }
+      setTimeout(() => { saveBtn.textContent = 'Save'; }, 1500);
+    }
+
+    function saveDebounced(ms = 800) {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveGraph, ms);
+    }
+
+    saveBtn.addEventListener('click', saveGraph);
+
+
+    // ── PDF UPLOAD + REVIEW ──────────────────────────────────────
+    const reviewOverlay  = document.getElementById('review-overlay');
+    const reviewNodeList = document.getElementById('review-node-list');
+    const reviewTitle    = document.getElementById('review-title');
+
+    function openReviewModal(candidates) {
+      return new Promise(resolve => {
+        const existingIds = new Set(cy.nodes().map(n => n.id()));
+        const newNodes = candidates.nodes.filter(n => !existingIds.has(n.data.id));
+
+        if (newNodes.length === 0) { resolve(null); return; }
+
+        reviewTitle.textContent = `${newNodes.length} new node(s) extracted — choose which to add:`;
+        reviewNodeList.innerHTML = '';
+        newNodes.forEach(node => {
+          const item = document.createElement('label');
+          item.className = 'review-item';
+          item.innerHTML = `<input type="checkbox" value="${node.data.id}" checked>
+                            <span>${node.data.label}</span>`;
+          reviewNodeList.appendChild(item);
+        });
+
+        reviewOverlay.classList.add('open');
+
+        function finish(confirmed) {
+          reviewOverlay.classList.remove('open');
+          document.getElementById('btn-review-confirm').removeEventListener('click', onConfirm);
+          document.getElementById('btn-review-cancel').removeEventListener('click', onCancel);
+          resolve(confirmed);
+        }
+
+        function onConfirm() {
+          const checked = new Set(
+            [...reviewNodeList.querySelectorAll('input:checked')].map(i => i.value)
+          );
+          const approvedNodes = candidates.nodes.filter(n => checked.has(n.data.id));
+          const approvedEdges = candidates.edges.filter(e => {
+            const srcOk = checked.has(e.data.source) || existingIds.has(e.data.source);
+            const tgtOk = checked.has(e.data.target) || existingIds.has(e.data.target);
+            return srcOk && tgtOk;
+          });
+          finish({ nodes: approvedNodes, edges: approvedEdges });
+        }
+
+        function onCancel() { finish(null); }
+
+        document.getElementById('btn-review-confirm').addEventListener('click', onConfirm);
+        document.getElementById('btn-review-cancel').addEventListener('click', onCancel);
+      });
+    }
+
+    function applyNewElements(newNodes, newEdges) {
+      if (newNodes.length + newEdges.length === 0) return;
+      cy.$('.newly-added').removeClass('newly-added');
+      cy.add([...newNodes, ...newEdges]);
+      newNodes.forEach(n => cy.getElementById(n.data.id).addClass('newly-added'));
+      newEdges.forEach(e => {
+        cy.edges(`[source="${e.data.source}"][target="${e.data.target}"]`).addClass('newly-added');
+      });
+      cy.layout({ name: 'cose', animate: true, animationDuration: 600,
+                  nodeRepulsion: 200000, idealEdgeLength: 100, padding: 40, fit: false }).run();
+    }
+
+    document.getElementById('pdf-input').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const status = document.getElementById('upload-status');
+      status.textContent = `Processing ${file.name}…`;
+
+      const form = new FormData();
+      form.append('file', file);
+
+      try {
+        const res = await fetch('/upload', { method: 'POST', body: form });
+        if (!res.ok) {
+          status.textContent = `Error: ${(await res.json()).detail}`;
+          return;
+        }
+        const candidates = await res.json();
+        status.textContent = '';
+
+        const approved = await openReviewModal(candidates);
+        if (!approved) {
+          status.textContent = 'Cancelled';
+          setTimeout(() => { status.textContent = ''; }, 2000);
+          return;
+        }
+
+        const confirmRes = await fetch(`/confirm/${encodeURIComponent(currentGraph)}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(approved),
+        });
+
+        if (!confirmRes.ok) {
+          status.textContent = `Error ${confirmRes.status}: ${(await confirmRes.text()).slice(0, 120)}`;
+          return;
+        }
+
+        const existingNodeIds   = new Set(cy.nodes().map(n => n.id()));
+        const existingEdgePairs = new Set(cy.edges().map(e => e.data('source') + '→' + e.data('target')));
+        const newNodes = approved.nodes.filter(n => !existingNodeIds.has(n.data.id));
+        const newEdges = approved.edges.filter(e => !existingEdgePairs.has(e.data.source + '→' + e.data.target));
+
+        applyNewElements(newNodes, newEdges);
+        saveGraph();
+        status.textContent = `+${newNodes.length} nodes, +${newEdges.length} edges`;
+        setTimeout(() => { status.textContent = ''; }, 3000);
+
+      } catch (err) {
+        status.textContent = `Network error: ${err.message}`;
+      }
+      e.target.value = '';
+    });
+
+
+    // ── SEARCH ───────────────────────────────────────────────────
+    document.getElementById('search-input').addEventListener('input', e => {
+      const keyword = e.target.value.trim().toLowerCase();
+      if (!keyword) {
+        cy.elements().removeClass('dimmed');
+        cy.nodes().style('background-color', '');
+        return;
+      }
+      const matching    = cy.nodes().filter(n =>  n.data('label').toLowerCase().includes(keyword));
+      const nonMatching = cy.nodes().filter(n => !n.data('label').toLowerCase().includes(keyword));
+      matching.style('background-color', '#ffdd44');
+      nonMatching.addClass('dimmed');
+      matching.removeClass('dimmed');
+    });
+
+
+    // ── BOOT ─────────────────────────────────────────────────────
+    initGraphList();
+
+  </script>
+</body>
+</html>

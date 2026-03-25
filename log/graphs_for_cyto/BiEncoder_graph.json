@@ -1,0 +1,212 @@
+{
+    "nodes": [
+        {
+            "data": {
+                "id": "BiEncoder",
+                "label": "BiEncoder"
+            }
+        },
+        {
+            "data": {
+                "id": "BERT",
+                "label": "BERT"
+            }
+        },
+        {
+            "data": {
+                "id": "Contrastive Learning",
+                "label": "Contrastive Learning"
+            }
+        },
+        {
+            "data": {
+                "id": "Mean Pooling",
+                "label": "Mean Pooling"
+            }
+        },
+        {
+            "data": {
+                "id": "Max Pooling",
+                "label": "Max Pooling"
+            }
+        },
+        {
+            "data": {
+                "id": "CLS Token",
+                "label": "CLS Token"
+            }
+        },
+        {
+            "data": {
+                "id": "SEP Token",
+                "label": "SEP Token"
+            }
+        },
+        {
+            "data": {
+                "id": "Semantic Similarity",
+                "label": "Semantic Similarity"
+            }
+        },
+        {
+            "data": {
+                "id": "Information Retrieval",
+                "label": "Information Retrieval"
+            }
+        },
+        {
+            "data": {
+                "id": "Ranking",
+                "label": "Ranking"
+            }
+        },
+        {
+            "data": {
+                "id": "Relevance Judgment",
+                "label": "Relevance Judgment"
+            }
+        },
+        {
+            "data": {
+                "id": "Tokenization",
+                "label": "Tokenization"
+            }
+        },
+        {
+            "data": {
+                "id": "Multimodal Learning",
+                "label": "Multimodal Learning"
+            }
+        }
+    ],
+    "edges": [
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "BERT",
+                "label": "uses two instances of",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Semantic Similarity",
+                "label": "computes",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Contrastive Learning",
+                "label": "trained with",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Information Retrieval",
+                "label": "applied to",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Ranking",
+                "label": "applied to",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Relevance Judgment",
+                "label": "applied to",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Multimodal Learning",
+                "label": "can support",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Tokenization",
+                "label": "uses as preprocessing",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "CLS Token",
+                "label": "uses as special token",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "SEP Token",
+                "label": "uses as special token",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Mean Pooling",
+                "label": "uses for pooling",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "BiEncoder",
+                "target": "Max Pooling",
+                "label": "can use for pooling",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "Mean Pooling",
+                "target": "Semantic Similarity",
+                "label": "preserves semantic meaning for",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "CLS Token",
+                "target": "Mean Pooling",
+                "label": "outperformed by",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "Max Pooling",
+                "target": "Mean Pooling",
+                "label": "outperformed by",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "Contrastive Learning",
+                "target": "Semantic Similarity",
+                "label": "optimizes",
+                "strength": "strong"
+            }
+        }
+    ]
+}

@@ -1,0 +1,170 @@
+{
+    "nodes": [
+        {
+            "data": {
+                "id": "Byte Pair Encoding",
+                "label": "Byte Pair Encoding"
+            }
+        },
+        {
+            "data": {
+                "id": "Tokenizer",
+                "label": "Tokenizer"
+            }
+        },
+        {
+            "data": {
+                "id": "Subword Tokenization",
+                "label": "Subword Tokenization"
+            }
+        },
+        {
+            "data": {
+                "id": "Vocabulary",
+                "label": "Vocabulary"
+            }
+        },
+        {
+            "data": {
+                "id": "Merge Rules",
+                "label": "Merge Rules"
+            }
+        },
+        {
+            "data": {
+                "id": "Character-Level Tokenization",
+                "label": "Character-Level Tokenization"
+            }
+        },
+        {
+            "data": {
+                "id": "Word-Level Tokenization",
+                "label": "Word-Level Tokenization"
+            }
+        },
+        {
+            "data": {
+                "id": "Hyperparameter K",
+                "label": "Hyperparameter K"
+            }
+        },
+        {
+            "data": {
+                "id": "WordPiece",
+                "label": "WordPiece"
+            }
+        },
+        {
+            "data": {
+                "id": "SentencePiece",
+                "label": "SentencePiece"
+            }
+        }
+    ],
+    "edges": [
+        {
+            "data": {
+                "source": "Byte Pair Encoding",
+                "target": "Tokenizer",
+                "label": "is a",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Byte Pair Encoding",
+                "target": "Subword Tokenization",
+                "label": "type of",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Byte Pair Encoding",
+                "target": "Vocabulary",
+                "label": "generates",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Byte Pair Encoding",
+                "target": "Merge Rules",
+                "label": "produces",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Byte Pair Encoding",
+                "target": "Hyperparameter K",
+                "label": "controlled by",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Hyperparameter K",
+                "target": "Character-Level Tokenization",
+                "label": "yields when K=0",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Hyperparameter K",
+                "target": "Word-Level Tokenization",
+                "label": "yields when K=\u221e",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Byte Pair Encoding",
+                "target": "Character-Level Tokenization",
+                "label": "starts from",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "Merge Rules",
+                "target": "Vocabulary",
+                "label": "defines entries in",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "WordPiece",
+                "target": "Subword Tokenization",
+                "label": "type of",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "SentencePiece",
+                "target": "Subword Tokenization",
+                "label": "type of",
+                "strength": "strong"
+            }
+        },
+        {
+            "data": {
+                "source": "WordPiece",
+                "target": "Byte Pair Encoding",
+                "label": "variant of",
+                "strength": "weak"
+            }
+        },
+        {
+            "data": {
+                "source": "SentencePiece",
+                "target": "Byte Pair Encoding",
+                "label": "can use",
+                "strength": "weak"
+            }
+        }
+    ]
+}

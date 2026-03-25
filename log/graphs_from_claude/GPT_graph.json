@@ -1,0 +1,229 @@
+{
+    "name": "GPT",
+    "nodes": [
+        {
+            "label": "GPT",
+            "embedding": []
+        },
+        {
+            "label": "Transformer",
+            "embedding": []
+        },
+        {
+            "label": "Decoder-Only Architecture",
+            "embedding": []
+        },
+        {
+            "label": "Causal Mask",
+            "embedding": []
+        },
+        {
+            "label": "Next Token Prediction",
+            "embedding": []
+        },
+        {
+            "label": "Byte Pair Encoding",
+            "embedding": []
+        },
+        {
+            "label": "Token Embedding",
+            "embedding": []
+        },
+        {
+            "label": "Positional Embedding",
+            "embedding": []
+        },
+        {
+            "label": "Cross-Entropy Loss",
+            "embedding": []
+        },
+        {
+            "label": "Softmax",
+            "embedding": []
+        },
+        {
+            "label": "Weight Tying",
+            "embedding": []
+        },
+        {
+            "label": "Maximum Likelihood Estimation",
+            "embedding": []
+        },
+        {
+            "label": "Negative Log-Likelihood",
+            "embedding": []
+        },
+        {
+            "label": "Self-Attention",
+            "embedding": []
+        },
+        {
+            "label": "BERT",
+            "embedding": []
+        },
+        {
+            "label": "Encoder-Only Architecture",
+            "embedding": []
+        },
+        {
+            "label": "Encoder-Decoder Architecture",
+            "embedding": []
+        },
+        {
+            "label": "Conditional Generation",
+            "embedding": []
+        },
+        {
+            "label": "Machine Translation",
+            "embedding": []
+        },
+        {
+            "label": "Parallel Training",
+            "embedding": []
+        },
+        {
+            "label": "Autoregressive Language Modeling",
+            "embedding": []
+        }
+    ],
+    "edges": [
+        {
+            "source": "GPT",
+            "target": "Decoder-Only Architecture",
+            "relationship": "uses",
+            "strength": "strong"
+        },
+        {
+            "source": "GPT",
+            "target": "Transformer",
+            "relationship": "based on",
+            "strength": "strong"
+        },
+        {
+            "source": "GPT",
+            "target": "Next Token Prediction",
+            "relationship": "trained with",
+            "strength": "strong"
+        },
+        {
+            "source": "GPT",
+            "target": "Autoregressive Language Modeling",
+            "relationship": "type of",
+            "strength": "strong"
+        },
+        {
+            "source": "Decoder-Only Architecture",
+            "target": "Causal Mask",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "GPT",
+            "target": "Byte Pair Encoding",
+            "relationship": "uses for tokenization",
+            "strength": "weak"
+        },
+        {
+            "source": "Byte Pair Encoding",
+            "target": "Token Embedding",
+            "relationship": "IDs mapped via",
+            "strength": "weak"
+        },
+        {
+            "source": "GPT",
+            "target": "Token Embedding",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "GPT",
+            "target": "Positional Embedding",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "Next Token Prediction",
+            "target": "Cross-Entropy Loss",
+            "relationship": "equivalent to minimizing",
+            "strength": "weak"
+        },
+        {
+            "source": "Next Token Prediction",
+            "target": "Maximum Likelihood Estimation",
+            "relationship": "equivalent to",
+            "strength": "weak"
+        },
+        {
+            "source": "Cross-Entropy Loss",
+            "target": "Negative Log-Likelihood",
+            "relationship": "computed as",
+            "strength": "strong"
+        },
+        {
+            "source": "GPT",
+            "target": "Softmax",
+            "relationship": "uses for output distribution",
+            "strength": "weak"
+        },
+        {
+            "source": "GPT",
+            "target": "Weight Tying",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "Weight Tying",
+            "target": "Token Embedding",
+            "relationship": "reuses matrix from",
+            "strength": "weak"
+        },
+        {
+            "source": "Causal Mask",
+            "target": "Self-Attention",
+            "relationship": "applied to",
+            "strength": "weak"
+        },
+        {
+            "source": "Causal Mask",
+            "target": "Softmax",
+            "relationship": "masks scores before",
+            "strength": "weak"
+        },
+        {
+            "source": "GPT",
+            "target": "Parallel Training",
+            "relationship": "enables via causal mask",
+            "strength": "weak"
+        },
+        {
+            "source": "BERT",
+            "target": "Encoder-Only Architecture",
+            "relationship": "uses",
+            "strength": "strong"
+        },
+        {
+            "source": "Encoder-Decoder Architecture",
+            "target": "Conditional Generation",
+            "relationship": "suited for",
+            "strength": "weak"
+        },
+        {
+            "source": "Conditional Generation",
+            "target": "Machine Translation",
+            "relationship": "example includes",
+            "strength": "weak"
+        },
+        {
+            "source": "Decoder-Only Architecture",
+            "target": "Encoder-Only Architecture",
+            "relationship": "contrasted with",
+            "strength": "weak"
+        },
+        {
+            "source": "Decoder-Only Architecture",
+            "target": "Encoder-Decoder Architecture",
+            "relationship": "contrasted with",
+            "strength": "weak"
+        }
+    ]
+}

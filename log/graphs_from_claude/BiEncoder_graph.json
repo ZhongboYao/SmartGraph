@@ -1,0 +1,145 @@
+{
+    "name": "BiEncoder",
+    "nodes": [
+        {
+            "label": "BiEncoder",
+            "embedding": []
+        },
+        {
+            "label": "BERT",
+            "embedding": []
+        },
+        {
+            "label": "Contrastive Learning",
+            "embedding": []
+        },
+        {
+            "label": "Mean Pooling",
+            "embedding": []
+        },
+        {
+            "label": "Max Pooling",
+            "embedding": []
+        },
+        {
+            "label": "CLS Token",
+            "embedding": []
+        },
+        {
+            "label": "Semantic Similarity",
+            "embedding": []
+        },
+        {
+            "label": "Information Retrieval",
+            "embedding": []
+        },
+        {
+            "label": "Ranking",
+            "embedding": []
+        },
+        {
+            "label": "Relevance Judgment",
+            "embedding": []
+        },
+        {
+            "label": "Tokenization",
+            "embedding": []
+        },
+        {
+            "label": "Multimodal Retrieval",
+            "embedding": []
+        }
+    ],
+    "edges": [
+        {
+            "source": "BiEncoder",
+            "target": "BERT",
+            "relationship": "uses as encoder",
+            "strength": "weak"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Contrastive Learning",
+            "relationship": "trained with",
+            "strength": "weak"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Semantic Similarity",
+            "relationship": "computes",
+            "strength": "strong"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Mean Pooling",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Max Pooling",
+            "relationship": "can use",
+            "strength": "weak"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "CLS Token",
+            "relationship": "can use for pooling",
+            "strength": "weak"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Tokenization",
+            "relationship": "uses as preprocessing",
+            "strength": "weak"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Information Retrieval",
+            "relationship": "applied to",
+            "strength": "strong"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Ranking",
+            "relationship": "applied to",
+            "strength": "strong"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Relevance Judgment",
+            "relationship": "applied to",
+            "strength": "strong"
+        },
+        {
+            "source": "BiEncoder",
+            "target": "Multimodal Retrieval",
+            "relationship": "can support",
+            "strength": "weak"
+        },
+        {
+            "source": "Mean Pooling",
+            "target": "Max Pooling",
+            "relationship": "outperforms",
+            "strength": "weak"
+        },
+        {
+            "source": "Mean Pooling",
+            "target": "CLS Token",
+            "relationship": "outperforms for semantic tasks",
+            "strength": "weak"
+        },
+        {
+            "source": "CLS Token",
+            "target": "Mean Pooling",
+            "relationship": "loses more semantic meaning than",
+            "strength": "weak"
+        },
+        {
+            "source": "Contrastive Learning",
+            "target": "Semantic Similarity",
+            "relationship": "optimizes",
+            "strength": "weak"
+        }
+    ]
+}

@@ -1,0 +1,113 @@
+{
+    "name": "BPE",
+    "nodes": [
+        {
+            "label": "Byte Pair Encoding",
+            "embedding": []
+        },
+        {
+            "label": "Tokenizer",
+            "embedding": []
+        },
+        {
+            "label": "Subword Tokenization",
+            "embedding": []
+        },
+        {
+            "label": "Vocabulary",
+            "embedding": []
+        },
+        {
+            "label": "Merge Rules",
+            "embedding": []
+        },
+        {
+            "label": "Character-Level Tokenization",
+            "embedding": []
+        },
+        {
+            "label": "Word-Level Tokenization",
+            "embedding": []
+        },
+        {
+            "label": "WordPiece",
+            "embedding": []
+        },
+        {
+            "label": "SentencePiece",
+            "embedding": []
+        },
+        {
+            "label": "Natural Language Processing",
+            "embedding": []
+        }
+    ],
+    "edges": [
+        {
+            "source": "Byte Pair Encoding",
+            "target": "Tokenizer",
+            "relationship": "is a type of",
+            "strength": "strong"
+        },
+        {
+            "source": "Byte Pair Encoding",
+            "target": "Subword Tokenization",
+            "relationship": "is a type of",
+            "strength": "strong"
+        },
+        {
+            "source": "Byte Pair Encoding",
+            "target": "Vocabulary",
+            "relationship": "generates",
+            "strength": "weak"
+        },
+        {
+            "source": "Byte Pair Encoding",
+            "target": "Merge Rules",
+            "relationship": "produces",
+            "strength": "weak"
+        },
+        {
+            "source": "Byte Pair Encoding",
+            "target": "Character-Level Tokenization",
+            "relationship": "starts from",
+            "strength": "weak"
+        },
+        {
+            "source": "Byte Pair Encoding",
+            "target": "Word-Level Tokenization",
+            "relationship": "approaches with large K",
+            "strength": "weak"
+        },
+        {
+            "source": "Subword Tokenization",
+            "target": "Tokenizer",
+            "relationship": "is a type of",
+            "strength": "strong"
+        },
+        {
+            "source": "WordPiece",
+            "target": "Subword Tokenization",
+            "relationship": "is a type of",
+            "strength": "strong"
+        },
+        {
+            "source": "SentencePiece",
+            "target": "Subword Tokenization",
+            "relationship": "is a type of",
+            "strength": "strong"
+        },
+        {
+            "source": "Byte Pair Encoding",
+            "target": "WordPiece",
+            "relationship": "is related to",
+            "strength": "weak"
+        },
+        {
+            "source": "Tokenizer",
+            "target": "Natural Language Processing",
+            "relationship": "is a component of",
+            "strength": "weak"
+        }
+    ]
+}

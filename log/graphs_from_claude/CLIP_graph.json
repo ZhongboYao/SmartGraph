@@ -1,0 +1,211 @@
+{
+    "name": "CLIP",
+    "nodes": [
+        {
+            "label": "CLIP",
+            "embedding": []
+        },
+        {
+            "label": "Contrastive Learning",
+            "embedding": []
+        },
+        {
+            "label": "ViT",
+            "embedding": []
+        },
+        {
+            "label": "ResNet",
+            "embedding": []
+        },
+        {
+            "label": "BERT",
+            "embedding": []
+        },
+        {
+            "label": "CLS Token",
+            "embedding": []
+        },
+        {
+            "label": "InfoNCE Loss",
+            "embedding": []
+        },
+        {
+            "label": "Cosine Similarity",
+            "embedding": []
+        },
+        {
+            "label": "Embedding Normalization",
+            "embedding": []
+        },
+        {
+            "label": "Bidirectional Loss",
+            "embedding": []
+        },
+        {
+            "label": "Self-Attention",
+            "embedding": []
+        },
+        {
+            "label": "CNN",
+            "embedding": []
+        },
+        {
+            "label": "Zero-Shot Learning",
+            "embedding": []
+        },
+        {
+            "label": "Image-Text Retrieval",
+            "embedding": []
+        },
+        {
+            "label": "Dense Alignment",
+            "embedding": []
+        },
+        {
+            "label": "Shared Embedding Space",
+            "embedding": []
+        },
+        {
+            "label": "Inductive Bias",
+            "embedding": []
+        },
+        {
+            "label": "Transformer",
+            "embedding": []
+        }
+    ],
+    "edges": [
+        {
+            "source": "CLIP",
+            "target": "Contrastive Learning",
+            "relationship": "trained with",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "ViT",
+            "relationship": "uses as image encoder",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "ResNet",
+            "relationship": "can use as image encoder",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "BERT",
+            "relationship": "uses BERT-like text encoder",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "Shared Embedding Space",
+            "relationship": "aligns images and text in",
+            "strength": "strong"
+        },
+        {
+            "source": "CLIP",
+            "target": "InfoNCE Loss",
+            "relationship": "optimized with",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "Bidirectional Loss",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "Image-Text Retrieval",
+            "relationship": "applied to",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "Zero-Shot Learning",
+            "relationship": "enables",
+            "strength": "weak"
+        },
+        {
+            "source": "CLIP",
+            "target": "CLS Token",
+            "relationship": "uses for image representation",
+            "strength": "weak"
+        },
+        {
+            "source": "Contrastive Learning",
+            "target": "InfoNCE Loss",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "Contrastive Learning",
+            "target": "Cosine Similarity",
+            "relationship": "computes similarity via",
+            "strength": "weak"
+        },
+        {
+            "source": "Cosine Similarity",
+            "target": "Embedding Normalization",
+            "relationship": "requires",
+            "strength": "weak"
+        },
+        {
+            "source": "ViT",
+            "target": "Transformer",
+            "relationship": "type of",
+            "strength": "strong"
+        },
+        {
+            "source": "ViT",
+            "target": "Self-Attention",
+            "relationship": "uses",
+            "strength": "weak"
+        },
+        {
+            "source": "ViT",
+            "target": "CLS Token",
+            "relationship": "produces",
+            "strength": "weak"
+        },
+        {
+            "source": "ResNet",
+            "target": "CNN",
+            "relationship": "based on",
+            "strength": "strong"
+        },
+        {
+            "source": "CNN",
+            "target": "Inductive Bias",
+            "relationship": "has high",
+            "strength": "weak"
+        },
+        {
+            "source": "Dense Alignment",
+            "target": "Contrastive Learning",
+            "relationship": "extends",
+            "strength": "strong"
+        },
+        {
+            "source": "Dense Alignment",
+            "target": "CLS Token",
+            "relationship": "replaces with dense embeddings",
+            "strength": "weak"
+        },
+        {
+            "source": "Bidirectional Loss",
+            "target": "InfoNCE Loss",
+            "relationship": "sums over both directions of",
+            "strength": "weak"
+        },
+        {
+            "source": "BERT",
+            "target": "Transformer",
+            "relationship": "type of",
+            "strength": "strong"
+        }
+    ]
+}
